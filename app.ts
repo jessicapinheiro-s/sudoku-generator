@@ -20,84 +20,165 @@ function gerarNumeroSemDuplicata(arr: number[]) {
     return numeroGer;
 }
 
+function sameNumberOtherPositions(numero: number): number[] {
+    const positions = matriz.map(arr => {
+        if (numero) {
+            const posicao = arr.indexOf(numero);
+            return posicao;
+        } else {
+            return false;
+        }
+
+    }).filter(item => item !== -1).filter(item => item !== false);
+
+    return positions;
+}
+
+function validacaoNumeroHorVer(arr: number[], numero: number): boolean {
+    return !arr.includes(numero);
+}
+
+
 let counter = 0;
 linhaLoop: do {
     let counterItem = 0;
     let arrAtualLinha: number[] = [];
-    
-    do {
-        //cuida para que não gere numeros dupicados horizontalmente em qualquer posição na linha
-        let numero = gerarNumeroSemDuplicata(arrAtualLinha);
 
+    while (counterItem < 9) {
+        let numero = gerarNumeroSemDuplicata(arrAtualLinha);
 
         if (numero) {
             if (counter !== 0) {
-
+                console.log('| NUMERO |', numero);
+                console.log('| COUNTER | ', counterItem);
                 const indexNumeroAtual = arrAtualLinha.length;
                 const nextPosition = indexNumeroAtual + 1;
                 const anteriorPosition = indexNumeroAtual === 0 ? 0 : indexNumeroAtual - 1;
 
                 const numerosVertical = matriz.map(arr => arr[indexNumeroAtual]);
 
-                const posicaoNumeroIgualAtualLinhasAnterior = matriz.map(arr => {
-                    if (numero) {
-                        const posicao = arr.indexOf(numero);
-                        return posicao;
+                const posicaoNumeroIgualAtualLinhasAnterior: number[] = sameNumberOtherPositions(numero);
+
+                const blocosVerticais = posicaoNumeroIgualAtualLinhasAnterior.map((item, index) => {
+                    if (index === 2) {
+                        return [
+                            posicaoNumeroIgualAtualLinhasAnterior[0],
+                            posicaoNumeroIgualAtualLinhasAnterior[1],
+                            posicaoNumeroIgualAtualLinhasAnterior[2]
+                        ]
+                    } else if (index === 5) {
+                        return [
+                            posicaoNumeroIgualAtualLinhasAnterior[3],
+                            posicaoNumeroIgualAtualLinhasAnterior[4],
+                            posicaoNumeroIgualAtualLinhasAnterior[5]
+                        ]
+                    } else if (index === 8) {
+                        return [
+                            posicaoNumeroIgualAtualLinhasAnterior[6],
+                            posicaoNumeroIgualAtualLinhasAnterior[7],
+                            posicaoNumeroIgualAtualLinhasAnterior[8]
+                        ]
                     } else {
                         return false;
                     }
+                }).filter(item => item !== false);
 
-                }).filter(item => item !== -1);
-                console.log({
-                    'numero': numero,
-                    'next': nextPosition,
-                    'antPosition': anteriorPosition,
-                    'indexNumeroAtual': indexNumeroAtual,
-                    'numerosVertical': numerosVertical,
-                    'validacao': numerosVertical.includes(numero),
-                    'position': posicaoNumeroIgualAtualLinhasAnterior
-                });
-                
+                const validacaoHorizontalAnt = (counter === 4 || counter === 7) ? true : validacaoNumeroHorVer(posicaoNumeroIgualAtualLinhasAnterior, nextPosition);
+                const validacaoHorizontalAft = (counter === 4 || counter === 7) ? true : validacaoNumeroHorVer(posicaoNumeroIgualAtualLinhasAnterior, anteriorPosition);
+
                 if (
                     !numerosVertical.includes(numero) &&
-                    !posicaoNumeroIgualAtualLinhasAnterior.includes(nextPosition) &&
-                    !posicaoNumeroIgualAtualLinhasAnterior.includes(anteriorPosition)
-                  ) {
+                    validacaoHorizontalAnt &&
+                    validacaoHorizontalAft
+                ) {
                     arrAtualLinha.push(numero);
+                    counterItem += 1;
                 } else {
                     //se existe algum numero na mesma posição vertical
                     if (numerosVertical.includes(numero)) {
-                        let tries = 0;
-                        while (tries < 10) {
-                            tries += 1;
-                            const novoNumero = gerarNumeroSemDuplicata(arrAtualLinha);
+                        console.log('numerosVertical')
+                        let novoNumeroValido = false;
 
+                        while (!novoNumeroValido) {
+                            const novoNumero = gerarNumeroSemDuplicata(arrAtualLinha);
                             if (!numerosVertical.includes(novoNumero)) {
+                                novoNumeroValido = true;
                                 arrAtualLinha.push(novoNumero);
-                                counterItem += 1;
-                                break;
                             }
                         }
-                    } else if (
-                        posicaoNumeroIgualAtualLinhasAnterior.includes(anteriorPosition) ||
-                        posicaoNumeroIgualAtualLinhasAnterior.includes(nextPosition)) {
-                        let tries = 0;
-                        
-                        console.log('duplicado')
+                    } else if (!validacaoHorizontalAnt) {
+                        console.log('!validacaoHorizontalAnt')
+                        let rightNumber = false;
+
+                        do {
+                            const novonNumeroBloco = gerarNumeroSemDuplicata(arrAtualLinha);
+                            const posicaoNumeroIgualAtualLinhasAnteriorNovo: number[] = sameNumberOtherPositions(novonNumeroBloco);
+
+                            //console.log('novonNumeroBlocoAnt', novonNumeroBloco)
+
+                            if (
+                                validacaoNumeroHorVer(posicaoNumeroIgualAtualLinhasAnteriorNovo, nextPosition) &&
+                                validacaoNumeroHorVer(posicaoNumeroIgualAtualLinhasAnteriorNovo, anteriorPosition) &&
+                                !numerosVertical.includes(novonNumeroBloco)
+                            ) {
+                                arrAtualLinha.push(novonNumeroBloco);
+                                rightNumber = true;
+                            }
+                        } while (rightNumber === false)
+
+                        //console.log('validacaoHorizontalAnt duplicado');
+                        /*console.log({
+                            'numero que deu problema': numero,
+                            'proxima posição': nextPosition,
+                            'posição anterior': anteriorPosition,
+                            'index do numero atual': indexNumeroAtual,
+                            'arrAtualLinha': arrAtualLinha,
+                            'mesmo numero linhas anteriores posição': posicaoNumeroIgualAtualLinhasAnterior
+                        });*/
+                    } else if (!validacaoHorizontalAft) {
+                        console.log('!validacaoHorizontalAft')
+                        let rightNumber = false;
+
+                        do {
+                            const novonNumeroBloco = gerarNumeroSemDuplicata(arrAtualLinha);
+                            const posicaoNumeroIgualAtualLinhasAnteriorNovo: number[] = sameNumberOtherPositions(novonNumeroBloco);
+
+                            //console.log('novonNumeroBlocoAft', novonNumeroBloco)
+
+                            if (
+                                validacaoNumeroHorVer(posicaoNumeroIgualAtualLinhasAnteriorNovo, nextPosition) &&
+                                validacaoNumeroHorVer(posicaoNumeroIgualAtualLinhasAnteriorNovo, anteriorPosition) &&
+                                !numerosVertical.includes(novonNumeroBloco)
+                            ) {
+                                arrAtualLinha.push(novonNumeroBloco);
+                                rightNumber = true;
+                            }
+                        } while (rightNumber === false)
+
+                        //console.log('validacaoHorizontalAft duplicado')
+                        /*console.log({
+                            'numero que deu problema': numero,
+                            'proxima posição': nextPosition,
+                            'posição anterior': anteriorPosition,
+                            'index do numero atual': indexNumeroAtual,
+                            'arrAtualLinha': arrAtualLinha,
+                            'mesmo numero linhas anteriores posição': posicaoNumeroIgualAtualLinhasAnterior
+                        });*/
+
+                    } else {
+                        console.log('não caiu na posição acima')
                     }
+                    counterItem += 1;
                 }
-                counterItem += 1;
             } else {
                 arrAtualLinha.push(numero);
                 counterItem += 1;
             }
         }
-
-    } while (counterItem < 9)
+    }
 
     counter += 1;
     matriz.push(arrAtualLinha);
-
     arrAtualLinha = []
     counterItem = 0;
 } while (counter <= 1);
