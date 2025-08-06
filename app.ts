@@ -45,11 +45,7 @@ function validationIndexes(arr: number[], index: number, counterLine: number, co
     if (counterLine === 4 || counterLine === 7 || counterNumber === 2 || counterNumber === 3 || counterNumber === 5 || counterNumber === 6) {
         if(counterLine === 7 || counterLine === 4) return true;
 
-        if(where === 'after'){
-
-        }else{
-            w
-        }
+        return validacaoNumeroHorVer(arr, index);
     } else {
         return validacaoNumeroHorVer(arr, index);
     }
@@ -76,21 +72,21 @@ linhaLoop: do {
                 const numerosVertical = matriz.map(arr => arr[indexNumeroAtual]);
                 const posicaoNumeroIgualAtualLinhasAnterior: number[] = sameNumberOtherPositions(numero);
 
-
-                const validacaoHorizontalVerticalAnt = validationIndexes(
+                //se for 2 ou 5 deve calcular apenas com base nos números anteriores da esquerda, se for 3 ou 6 calcular apenas com base nos números da esquerda
+                const validacaoHorizontalVerticalAnt = (counterItem === 3 || counterItem === 6) ? true : validationIndexes(
                     posicaoNumeroIgualAtualLinhasAnterior,
                     counterItem === 0 ? nextPositionForFirst : counterItem === 8 ? anteriorPositionForLast : nextPosition,
                     counter,
                     counterItem
                 );
-                const validacaoHorizontalVerticalAft = validationIndexes(
+
+
+                const validacaoHorizontalVerticalAft = (counterItem === 2 || counterItem === 3) ? true : validationIndexes(
                     posicaoNumeroIgualAtualLinhasAnterior,
                     counterItem === 0 ? nextPosition : counterItem === 8 ? anteriorPosition : anteriorPosition,
                     counter,
                     counterItem
                 );
-
-
 
                 if (
                     !numerosVertical.includes(numero) &&
@@ -125,14 +121,14 @@ linhaLoop: do {
                             
                             const antposicaoNumeroIgualAtualLinhasAnterior: number[] = sameNumberOtherPositions(novonNumeroBloco);
 
-                            const antvalidationIndexsAnt = validationIndexes(
+                            const antvalidationIndexsAnt = (counterItem === 3 || counterItem === 6) ? true : validationIndexes(
                                 antposicaoNumeroIgualAtualLinhasAnterior,
                                 (counterItem === 0 ? nextPositionForFirst : counterItem === 8 ? anteriorPositionForLast : nextPosition),
                                 counter,
                                 counterItem
                             );
 
-                            const antvalidationIndexsAft = validationIndexes(
+                            const antvalidationIndexsAft = (counterItem === 2 || counterItem === 3) ? true : validationIndexes(
                                 antposicaoNumeroIgualAtualLinhasAnterior,
                                 (counterItem === 0 ? nextPosition : counterItem === 8 ? anteriorPosition : anteriorPosition),
                                 counter,
@@ -163,14 +159,14 @@ linhaLoop: do {
                             const novonNumeroBloco = gerarNumeroSemDuplicata(arrAtualLinha);
                             const aftposicaoNumeroIgualAtualLinhasAnteriorNovo: number[] = sameNumberOtherPositions(novonNumeroBloco);
 
-                            const aftvalidationIndexsAnt = validationIndexes(
+                            const aftvalidationIndexsAnt = (counterItem === 3 || counterItem === 6) ? true : validationIndexes(
                                 aftposicaoNumeroIgualAtualLinhasAnteriorNovo,
                                 (counterItem === 0 ? nextPositionForFirst : counterItem === 8 ? anteriorPositionForLast : nextPosition),
                                 counter,
                                 counterItem
                             );
 
-                            const aftvalidationIndexsAft = validationIndexes(
+                            const aftvalidationIndexsAft = (counterItem === 2 || counterItem === 3) ? true : validationIndexes(
                                 aftposicaoNumeroIgualAtualLinhasAnteriorNovo,
                                 (counterItem === 0 ? nextPosition : counterItem === 8 ? anteriorPosition : anteriorPosition),
                                 counter,
