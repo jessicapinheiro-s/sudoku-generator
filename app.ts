@@ -39,6 +39,23 @@ function validacaoNumeroHorVer(arr: number[], numero: number): boolean {
 }
 
 
+function validationIndexes(arr: number[], index: number, counterLine: number, counterNumber: number, where?: string ) {
+    //se for 2 ou 5 deve calcular apenas com base nos números anteriores da esquerda, se for 3 ou 6 calcular apenas com base nos números da esquerda
+    
+    if (counterLine === 4 || counterLine === 7 || counterNumber === 2 || counterNumber === 3 || counterNumber === 5 || counterNumber === 6) {
+        if(counterLine === 7 || counterLine === 4) return true;
+
+        if(where === 'after'){
+
+        }else{
+            w
+        }
+    } else {
+        return validacaoNumeroHorVer(arr, index);
+    }
+}
+
+
 let counter = 0;
 linhaLoop: do {
     let counterItem = 0;
@@ -59,27 +76,28 @@ linhaLoop: do {
                 const numerosVertical = matriz.map(arr => arr[indexNumeroAtual]);
                 const posicaoNumeroIgualAtualLinhasAnterior: number[] = sameNumberOtherPositions(numero);
 
-                const validationIndexsAnt = validacaoNumeroHorVer(posicaoNumeroIgualAtualLinhasAnterior, (counterItem === 0 ? nextPositionForFirst : counterItem === 8 ? anteriorPositionForLast : nextPosition))
-                const validationIndexsAft = validacaoNumeroHorVer(posicaoNumeroIgualAtualLinhasAnterior, (counterItem === 0 ? nextPosition : counterItem === 8 ? anteriorPosition : anteriorPosition))
 
-                const validacaoHorizontalAnt = (counter === 4 || counter === 7) ? true : validationIndexsAnt;
-                const validacaoHorizontalAft = (counter === 4 ||   unter === 7) ? true : validationIndexsAft;
+                const validacaoHorizontalVerticalAnt = validationIndexes(
+                    posicaoNumeroIgualAtualLinhasAnterior,
+                    counterItem === 0 ? nextPositionForFirst : counterItem === 8 ? anteriorPositionForLast : nextPosition,
+                    counter,
+                    counterItem
+                );
+                const validacaoHorizontalVerticalAft = validationIndexes(
+                    posicaoNumeroIgualAtualLinhasAnterior,
+                    counterItem === 0 ? nextPosition : counterItem === 8 ? anteriorPosition : anteriorPosition,
+                    counter,
+                    counterItem
+                );
 
-                console.log('| NUMERO |', numero);
-                console.log('| COUNTER | ', counterItem);
-                console.log('| posicaoNumeroIgualAtualLinhasAnterior | ', posicaoNumeroIgualAtualLinhasAnterior);
-                console.log('| nextPosition | ', counterItem === 0 ? nextPositionForFirst : counterItem === 8 ? anteriorPositionForLast : nextPosition);
-                console.log('| anteriorPositionForLast | ', counterItem === 0 ? nextPosition : counterItem === 8 ? anteriorPosition : anteriorPosition);
 
 
-                /*
                 if (
                     !numerosVertical.includes(numero) &&
-                    validacaoHorizontalAnt &&
-                    validacaoHorizontalAft
+                    validacaoHorizontalVerticalAnt &&
+                    validacaoHorizontalVerticalAft
                 ) {
                     arrAtualLinha.push(numero);
-                    counterItem += 1;
                 } else {
                     //se existe algum numero na mesma posição vertical
                     if (numerosVertical.includes(numero)) {
@@ -93,19 +111,37 @@ linhaLoop: do {
                                 arrAtualLinha.push(novoNumero);
                             }
                         }
-                    } else if (!validacaoHorizontalAnt) {
+                    } else if (!validacaoHorizontalVerticalAnt) {
+                        console.log('!validacaoHorizontalAnt');
+                        console.log({
+                            'matriz': matriz,
+                            'arrAtualLinha': arrAtualLinha
+                        })
 
                         let rightNumber = false;
 
                         do {
                             const novonNumeroBloco = gerarNumeroSemDuplicata(arrAtualLinha);
-                            const posicaoNumeroIgualAtualLinhasAnteriorNovo: number[] = sameNumberOtherPositions(novonNumeroBloco);
-                            console.log('!validacaoHorizontalAnt')
-                            //console.log('novonNumeroBlocoAnt', novonNumeroBloco)
+                            
+                            const antposicaoNumeroIgualAtualLinhasAnterior: number[] = sameNumberOtherPositions(novonNumeroBloco);
+
+                            const antvalidationIndexsAnt = validationIndexes(
+                                antposicaoNumeroIgualAtualLinhasAnterior,
+                                (counterItem === 0 ? nextPositionForFirst : counterItem === 8 ? anteriorPositionForLast : nextPosition),
+                                counter,
+                                counterItem
+                            );
+
+                            const antvalidationIndexsAft = validationIndexes(
+                                antposicaoNumeroIgualAtualLinhasAnterior,
+                                (counterItem === 0 ? nextPosition : counterItem === 8 ? anteriorPosition : anteriorPosition),
+                                counter,
+                                counterItem
+                            );
 
                             if (
-                                validationIndexsAnt &&
-                                validationIndexsAft &&
+                                antvalidationIndexsAnt &&
+                                antvalidationIndexsAft &&
                                 !numerosVertical.includes(novonNumeroBloco)
                             ) {
                                 arrAtualLinha.push(novonNumeroBloco);
@@ -113,35 +149,37 @@ linhaLoop: do {
                             }
                         } while (rightNumber === false)
 
-                        //console.log('validacaoHorizontalAnt duplicado');
-                        console.log({
-                            'numero que deu problema': numero,
-                            'proxima posição': nextPosition,
-                            'posição anterior': anteriorPosition,
-                            'index do numero atual': indexNumeroAtual,
-                            'arrAtualLinha': arrAtualLinha,
-                            'mesmo numero linhas anteriores posição': posicaoNumeroIgualAtualLinhasAnterior
-                        });
-                    } else if (!validacaoHorizontalAft) {
+
+                    } else if (!validacaoHorizontalVerticalAft) {
                         let rightNumber = false;
                         let indexN = 0;
+                        console.log('!validacaoHorizontalAft');
+                        console.log({
+                            'matriz': matriz,
+                            'arrAtualLinha': arrAtualLinha
+                        })
+
                         do {
                             const novonNumeroBloco = gerarNumeroSemDuplicata(arrAtualLinha);
-                            const posicaoNumeroIgualAtualLinhasAnteriorNovo: number[] = sameNumberOtherPositions(novonNumeroBloco);
+                            const aftposicaoNumeroIgualAtualLinhasAnteriorNovo: number[] = sameNumberOtherPositions(novonNumeroBloco);
 
-                            console.log({
-                                'novonNumeroBloco': novonNumeroBloco,
-                                'matriz': matriz,
-                                'arrAtualLinha': arrAtualLinha,
-                                'posicaoNumeroIgualAtualLinhasAnteriorNovo': posicaoNumeroIgualAtualLinhasAnteriorNovo,
-                                '!validacaoHorizontalAft': '!validacaoHorizontalAft',
-                                'nextPosition': validationIndexsAnt,
-                                'anteriorPosition': validationIndexsAft
-                            })
+                            const aftvalidationIndexsAnt = validationIndexes(
+                                aftposicaoNumeroIgualAtualLinhasAnteriorNovo,
+                                (counterItem === 0 ? nextPositionForFirst : counterItem === 8 ? anteriorPositionForLast : nextPosition),
+                                counter,
+                                counterItem
+                            );
+
+                            const aftvalidationIndexsAft = validationIndexes(
+                                aftposicaoNumeroIgualAtualLinhasAnteriorNovo,
+                                (counterItem === 0 ? nextPosition : counterItem === 8 ? anteriorPosition : anteriorPosition),
+                                counter,
+                                counterItem
+                            );
 
                             if (
-                                validationIndexsAnt &&
-                                validationIndexsAft &&
+                                aftvalidationIndexsAnt &&
+                                aftvalidationIndexsAft &&
                                 !numerosVertical.includes(novonNumeroBloco)
                             ) {
                                 arrAtualLinha.push(novonNumeroBloco);
@@ -150,22 +188,11 @@ linhaLoop: do {
                             indexN += 1;
                         } while (rightNumber === false || indexN === 10)
 
-                        //console.log('validacaoHorizontalAft duplicado')
-                        console.log({
-                            'numero que deu problema': numero,
-                            'proxima posição': nextPosition,
-                            'posição anterior': anteriorPosition,
-                            'index do numero atual': indexNumeroAtual,
-                            'arrAtualLinha': arrAtualLinha,
-                            'mesmo numero linhas anteriores posição': posicaoNumeroIgualAtualLinhasAnterior
-                        });
 
                     } else {
                         console.log('não caiu na posição acima')
                     }
-                    counterItem += 1;
-                }*/
-
+                }
                 counterItem += 1;
             } else {
                 arrAtualLinha.push(numero);
@@ -178,7 +205,38 @@ linhaLoop: do {
     matriz.push(arrAtualLinha);
     arrAtualLinha = []
     counterItem = 0;
-} while (counter <= 1);
+} while (counter < 5);
 
-console.log(matriz)
+console.log(matriz);
 
+
+
+//console.log('| NUMERO |', numero);
+//console.log('| COUNTER | ', counterItem);
+//console.log('| Index num Atual|', indexNumeroAtual);
+//console.log('| posicaoNumeroIgualAtualLinhasAnterior | ', posicaoNumeroIgualAtualLinhasAnterior);
+//console.log('| nextPosition | ', counterItem === 0 ? nextPositionForFirst : counterItem === 8 ? anteriorPositionForLast : nextPosition);
+//console.log('| anteriorPositionForLast | ', counterItem === 0 ? nextPosition : counterItem === 8 ? anteriorPosition : anteriorPosition);
+
+
+/*
+   console.log('validacaoHorizontalAft duplicado')
+                        console.log({
+                            'numero que deu problema': numero,
+                            'proxima posição': nextPosition,
+                            'posição anterior': anteriorPosition,
+                            'index do numero atual': indexNumeroAtual,
+                            'arrAtualLinha': arrAtualLinha,
+                            'mesmo numero linhas anteriores posição': posicaoNumeroIgualAtualLinhasAnterior
+                        });
+
+                            console.log({
+                                'novonNumeroBloco': novonNumeroBloco,
+                                'matriz': matriz,
+                                'arrAtualLinha': arrAtualLinha,
+                                'posicaoNumeroIgualAtualLinhasAnteriorNovo': posicaoNumeroIgualAtualLinhasAnteriorNovo,
+                                '!validacaoHorizontalAft': '!validacaoHorizontalAft',
+                                'nextPosition': aftvalidationIndexsAnt,
+                                'anteriorPosition': aftvalidationIndexsAft
+                            })
+*/
