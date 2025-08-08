@@ -9,12 +9,8 @@ function gerarNumeroSemDuplicata(arr: number[], numerosBlocoDisponiveisBloco?: n
     let flagNumberFound = false;
     while (flagNumberFound === false) {
         const num = sortearNumero();
-        /*console.log({
-            'num': num,
-            'numerosBlocoDisponiveisBloco': numerosBlocoDisponiveisBloco,
-            'arr': arr,
-        })*/
-        //cuida para que não gere numeros dupicados horizontalmente em qualquer posição na linha
+        //se numero 3 existir no bloco 3 horizontal ele deve ser gerado aleatoriamente dentro do bloco 1 ou 2
+        //para isso, eu preciso da posição em bloco (horizontal) de cada numero a cada linha
         if (!arr.includes(num)) {
             if (numerosBlocoDisponiveisBloco) {
                 if (numerosBlocoDisponiveisBloco?.includes(num)) {
@@ -53,7 +49,7 @@ function validacaoNumeroHorVer(arr: number[], numero: number): boolean {
 
 
 let counter = 0;
-linhaLoop: do {
+do {
     let counterItem = 0;
     let arrAtualLinha: number[] = [];
     let rightNumber = true;
@@ -61,7 +57,7 @@ linhaLoop: do {
 
     while (counterItem < 9) {
         let numero = gerarNumeroSemDuplicata(arrAtualLinha);
-        
+
         let numerosBloco: any[] = [];
         const indexNumeroAtual: number = arrAtualLinha.length;
 
@@ -104,6 +100,16 @@ linhaLoop: do {
                 const nextPositionForFirst: number = indexNumeroAtual + 2;
                 const anteriorPositionForLast: number = indexNumeroAtual - 2;
                 const anteriorPosition: number = indexNumeroAtual === 0 ? 0 : indexNumeroAtual - 1;
+
+                const relacaoNumeroBloco = matriz.map(arr => {
+                    const arrBase = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+                    
+                    arrBase.forEach(numero =>{
+                        const indexNumber = arr.indexOf(numero);
+
+                        
+                    })
+                })
 
                 const numerosVertical = matriz.map(arr => arr[indexNumeroAtual]);
                 const posicaoNumeroIgualAtualLinhasAnterior: number[] = sameNumberOtherPositions((blocosHorizontais ?? [[]]), numero);
