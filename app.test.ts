@@ -85,6 +85,40 @@ describe('generateSudoku', () => {
                 expect(filNum).toBe(true);
             })
         })
-
     });
+
+    test('Cada bloco 3x3 deve conter números únicos de 1 a 9', () => {
+        const sudoku: number[][] = generateSudoku();
+
+        function extrairBloco(sudoku: number[][], blocoIndex: number): number[] {
+            const bloco = [];
+            const linhaBase = Math.floor(blocoIndex / 3) * 3;
+            const colunaBase = (blocoIndex % 3) * 3;
+
+            for (let i = 0; i < 3; i++) {
+                for (let j = 0; j < 3; j++) {
+                    bloco.push(sudoku[linhaBase + i]![colunaBase + j]!);
+                }
+            }
+            return bloco;
+        }
+
+        for (let i = 0; i < 9; i++) {
+            const bloco = extrairBloco(sudoku, i);
+
+            // Deve ter 9 números no bloco
+            expect(bloco.length).toBe(9);
+
+            // Deve conter só números de 1 a 9
+            bloco.forEach(num => {
+                expect(num).toBeGreaterThanOrEqual(1);
+                expect(num).toBeLessThanOrEqual(9);
+            });
+
+            // Deve conter números únicos (sem repetição)
+            const conjunto = new Set(bloco);
+            expect(conjunto.size).toBe(9);
+        }
+    });
+
 })
