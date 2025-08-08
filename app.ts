@@ -3,7 +3,7 @@ export function sortearNumero(numerosDisponiveis: number[]) {
     return numerosDisponiveis[indexAleatorio];
 }
 
-const matriz: number[][] = [];
+
 
 export function gerarNumeroSemDuplicata(
     arr: number[],
@@ -18,7 +18,6 @@ export function gerarNumeroSemDuplicata(
         while (flagNumberFound === false) {
             const num = sortearNumero(numerosBlocoDisponiveisBloco);
             if (num) {
-
                 if (!arr.includes(num)) {
                     if (numerosBlocoDisponiveisBloco?.includes(num)) {
                         numeroGer = num;
@@ -29,7 +28,6 @@ export function gerarNumeroSemDuplicata(
             } else {
                 flagNumberFound = true;
                 break;
-                console.log('[ERRO]Numero invalido')
             }
         }
         return numeroGer;
@@ -37,7 +35,8 @@ export function gerarNumeroSemDuplicata(
 }
 
 
-export function generateSudoku() {
+export function generateSudoku(): number[][] {
+    const matriz: number[][] = [];
     let counter = 0;
     const numerosBaseMatriz = [1, 2, 3, 4, 5, 6, 7, 8, 9];
     do {
@@ -111,6 +110,7 @@ export function generateSudoku() {
         arrAtualLinha = []
         counterItem = 0;
     } while (counter < 9);
+    return matriz;
 }
 
 generateSudoku();
