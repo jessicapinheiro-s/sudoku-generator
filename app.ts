@@ -1,31 +1,40 @@
-function sortearNumero() {
-    return Math.floor(Math.random() * 9) + 1;
+function sortearNumero(numerosDisponiveis: number[]) {
+    const indexAleatorio: number = Math.floor(Math.random() * numerosDisponiveis.length);
+    return numerosDisponiveis[indexAleatorio];
 }
 
 const matriz: number[][] = [];
 
-function gerarNumeroSemDuplicata(arr: number[], numerosBlocoDisponiveisBloco?: number[]) {
+function gerarNumeroSemDuplicata(
+    arr: number[],
+    numerosBlocoDisponiveisBloco: number[]
+) {
     let numeroGer: number = 0;
     let flagNumberFound = false;
+
     while (flagNumberFound === false) {
-        const num = sortearNumero();
-        //se numero 3 existir no bloco 3 horizontal ele deve ser gerado aleatoriamente dentro do bloco 1 ou 2
-        //para isso, eu preciso da posição em bloco (horizontal) de cada numero a cada linha
-        if (!arr.includes(num)) {
-            if (numerosBlocoDisponiveisBloco) {
+        const num = sortearNumero(numerosBlocoDisponiveisBloco);
+        if (num) {
+            //se numero 3 existir no bloco 3 horizontal ele deve ser gerado aleatoriamente dentro do bloco 1 ou 2
+            //para isso, eu preciso da posição em bloco (horizontal) de cada numero a cada linha
+            console.log({
+                'num': num,
+                'numerosBlocoDisponiveisBloco': numerosBlocoDisponiveisBloco,
+                'arr': arr
+            })
+            if (!arr.includes(num)) {
                 if (numerosBlocoDisponiveisBloco?.includes(num)) {
                     numeroGer = num;
                     flagNumberFound = true;
                     break;
                 }
-            } else {
-                numeroGer = num;
-                flagNumberFound = true;
-                break;
             }
+        } else {
+            flagNumberFound = true;
+            break;
+            console.log('[ERRO]Numero invalido')
         }
     }
-
     return numeroGer;
 }
 
@@ -56,9 +65,9 @@ do {
     let novoNumeroValido = true;
 
     while (counterItem < 9) {
-        let numero = gerarNumeroSemDuplicata(arrAtualLinha);
-
         let numerosBloco: any[] = [];
+        let numerosBlocoDisponiveis: any[] = [];
+
         const indexNumeroAtual: number = arrAtualLinha.length;
 
         const blocosHorizontais = matriz.map((arr, index) => {
@@ -93,23 +102,16 @@ do {
             }
         });
 
+        numerosBlocoDisponiveis = [1, 2, 3, 4, 5, 6, 7, 8, 9].filter(item => !arrAtualLinha.includes(item) && !numerosBloco.includes(item));
+        let numero = gerarNumeroSemDuplicata(arrAtualLinha, numerosBlocoDisponiveis);
+
 
         if (numero) {
             if (counter !== 0) {
-                const nextPosition: number = indexNumeroAtual + 1;
+                /*const nextPosition: number = indexNumeroAtual + 1;
                 const nextPositionForFirst: number = indexNumeroAtual + 2;
                 const anteriorPositionForLast: number = indexNumeroAtual - 2;
                 const anteriorPosition: number = indexNumeroAtual === 0 ? 0 : indexNumeroAtual - 1;
-
-                const relacaoNumeroBloco = matriz.map(arr => {
-                    const arrBase = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-                    
-                    arrBase.forEach(numero =>{
-                        const indexNumber = arr.indexOf(numero);
-
-                        
-                    })
-                })
 
                 const numerosVertical = matriz.map(arr => arr[indexNumeroAtual]);
                 const posicaoNumeroIgualAtualLinhasAnterior: number[] = sameNumberOtherPositions((blocosHorizontais ?? [[]]), numero);
@@ -152,7 +154,7 @@ do {
                 ) {
                     arrAtualLinha.push(numero);
                 } else {
-                    let numerosBlocoDisponiveis: any[] = [];
+                    numerosBlocoDisponiveis = []
                     //se existe algum numero na mesma posição vertical
                     if (numerosVertical.includes(numero)) {
                         console.log('numerosVertical')
@@ -273,7 +275,7 @@ do {
                     } else {
                         console.log('não caiu na posição acima')
                     }
-                }
+                }*/
                 counterItem += 1;
             } else {
                 arrAtualLinha.push(numero);
@@ -287,6 +289,42 @@ do {
     matriz.push(arrAtualLinha);
     arrAtualLinha = []
     counterItem = 0;
-} while (counter < 5);
+} while (counter < 1);
 
 console.log(matriz);
+
+
+/**
+ *  
+        const objBlocoNum: {
+            "bloco1": number[],
+            "bloco2": number[],
+            "bloco3": number[]
+        } = {
+            "bloco1": [],
+            "bloco2": [],
+            "bloco3": []
+        };
+
+        numerosBloco.forEach(arr => {
+            const arrBase = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+
+            arrBase.forEach(numero => {
+                const indexNumber = arr.indexOf(numero);
+
+                if (indexNumber !== -1) {
+                    if (indexNumber <= 2) {
+                        objBlocoNum.bloco1.push(numero);
+                    } else if (indexNumber > 2 && indexNumber <= 5) {
+                        objBlocoNum.bloco2.push(numero);
+                    } else {
+                        objBlocoNum.bloco3.push(numero);
+                    }
+                }
+
+            })
+        });
+
+        const blocoatual = indexNumeroAtual <= 2 ? "bloco1" : indexNumeroAtual > 2 && indexNumeroAtual <= 5 ? "bloco2" : "bloco3";
+        
+ */
