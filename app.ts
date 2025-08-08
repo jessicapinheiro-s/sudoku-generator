@@ -1,11 +1,11 @@
-function sortearNumero(numerosDisponiveis: number[]) {
+export function sortearNumero(numerosDisponiveis: number[]) {
     const indexAleatorio: number = Math.floor(Math.random() * numerosDisponiveis.length);
     return numerosDisponiveis[indexAleatorio];
 }
 
 const matriz: number[][] = [];
 
-function gerarNumeroSemDuplicata(
+export function gerarNumeroSemDuplicata(
     arr: number[],
     numerosBlocoDisponiveisBloco: number[]
 ) {
@@ -37,7 +37,7 @@ function gerarNumeroSemDuplicata(
 }
 
 
-function generateSudoku() {
+export function generateSudoku() {
     let counter = 0;
     const numerosBaseMatriz = [1, 2, 3, 4, 5, 6, 7, 8, 9];
     do {
