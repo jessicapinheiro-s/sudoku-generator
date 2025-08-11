@@ -136,13 +136,25 @@ export function generateByDifficult(difficultLevel: string) {
     //de acordo com o nivel de dificuldade selecionado, deve-se gerar um arr de numeros a ser sorteado para serem retirados do sudoku
     const rangeArr = difficultLevel === 'Facil' ? [8, 20] : difficultLevel === 'Médio' ? [25, 50] : [35, 60];
     const rangeOf = generateRange(rangeArr);
-
+    const matriz = generateSudoku();
+    const numerosBase = [1, 2, 3, 4, 5, 6, 7, 8, 9,];
     if (rangeOf) {
         const numsToBeDeleted = sortearNumero(rangeOf);
 
+        if (numsToBeDeleted) {
+            for (let i = 0; i < numsToBeDeleted; i++) {
+                matriz.map(arr => {
+                    const sortearPositions = sortearNumero(numerosBase);
+                    if(sortearPositions){
+                        const newArr = arr.splice(sortearPositions, 1);
+                        arr = newArr;
+                    };
+
+                    return arr;
+                })
+            }
+        }
     };
-
-
 }
 
 generateSudoku();
