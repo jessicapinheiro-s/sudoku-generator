@@ -138,6 +138,9 @@ export function generateByDifficult(difficultLevel: string) {
     const rangeOf = generateRange(rangeArr);
     const matriz = generateSudoku();
     const numerosBase = [1, 2, 3, 4, 5, 6, 7, 8, 9,];
+
+    if(difficultLevel !== 'Facil' && difficultLevel !== 'Médio' && difficultLevel !== 'Dificil') return [];
+
     if (rangeOf) {
         const numsToBeDeleted = sortearNumero(rangeOf);
 

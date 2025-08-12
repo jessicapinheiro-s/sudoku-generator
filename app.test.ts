@@ -1,4 +1,4 @@
-import { generateSudoku, sortearNumero, gerarNumeroSemDuplicata } from './app';
+import { generateSudoku, sortearNumero, gerarNumeroSemDuplicata, generateRange, generateByDifficult } from './app';
 
 
 describe('sortearNumero', () => {
@@ -121,4 +121,33 @@ describe('generateSudoku', () => {
         }
     });
 
-})
+});
+
+describe('generateRange', () => {
+    test('Deve retornar um array', () => {
+        const params = [20, 56];
+        const result = generateRange(params);
+        expect(Array.isArray(result)).toBe(true);
+    });
+
+
+    test('Deve retornar um array de numeros', () => {
+        const params = [20, 56];
+        const result = generateRange(params);
+
+        if(result) {
+            const resultAllNumber = result.map(item => typeof item === "number" ? true : false);
+            expect(resultAllNumber).not.toContain(false);
+        }
+    });
+});
+
+describe('generateByDifficult', () => {
+    test('Verificar se parametro recebido é o correto', () => {
+        const param = 'Gato';
+
+        const result = generateByDifficult(param);
+
+        expect(result).toBe([]);
+    });
+});
