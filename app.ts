@@ -1,6 +1,6 @@
-export function sortearNumero(numerosDisponiveis: number[]) {
+export function sortearNumero(numerosDisponiveis: number[]): number {
     const indexAleatorio: number = Math.floor(Math.random() * numerosDisponiveis.length);
-    return numerosDisponiveis[indexAleatorio];
+    return numerosDisponiveis[indexAleatorio] ? numerosDisponiveis[indexAleatorio] : 0;
 }
 
 
@@ -148,15 +148,20 @@ export function generateByDifficult(difficultLevel: string) {
 
         if (numsToBeDeleted) {
             for (let i = 0; i < numsToBeDeleted; i++) {
-                const linhaAserAlterada = sortearNumero(numerosBase);
-                if (linhaAserAlterada) {
-                    const line = matriz[linhaAserAlterada];
-                    const sortearPositions = sortearNumero(numerosBase);
+                let foundCorretPosition = false;
+                const linhaAserAlterada: number = sortearNumero(numerosBase);
+                const line = matriz[linhaAserAlterada];
 
-                    if (sortearPositions && line) {
-                        line.splice(sortearPositions, 1, 0);
-                    };
+                if (line) {
+                    while (foundCorretPosition === false) {
+                        const sortearPositions = sortearNumero(numerosBase);
+                        if (line[sortearPositions] !== 0) {
+                            line.splice(sortearPositions, 1, 0);
+                            foundCorretPosition = true;
+                        }
+                    }
                 }
+
             }
         }
         console.log(matriz)
