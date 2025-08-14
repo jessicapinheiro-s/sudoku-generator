@@ -11,7 +11,7 @@ describe('sortearNumero', () => {
     test('Deve lidar com array vazio', () => {
         const numeros: [] = [];
         const result = sortearNumero(numeros);
-        expect(result).toBe(undefined);
+        expect(result).toBe(0);
     });
 
 })
@@ -157,7 +157,6 @@ describe('generateByDifficult', () => {
         };
         const param = 'Facil';
         const result = generateByDifficult(param);
-        console.log('result', result)
 
         let newArrRef: number[] = [];
 

@@ -3,7 +3,6 @@ export function sortearNumero(numerosDisponiveis: number[]): number {
     return numerosDisponiveis[indexAleatorio] ? numerosDisponiveis[indexAleatorio] : 0;
 }
 
-
 export function gerarNumeroSemDuplicata(
     arr: number[],
     numerosBlocoDisponiveisBloco: number[]
@@ -85,21 +84,14 @@ export function generateSudoku(): number[][] {
             numerosBlocoDisponiveis = numerosBaseMatriz.filter(item => !arrAtualLinha.includes(item) && !numerosBloco.includes(item) && !numerosVertical.includes(item));
             let numero = gerarNumeroSemDuplicata(arrAtualLinha, numerosBlocoDisponiveis);
 
-            if (numero === null) {
+            if (numero === null || numero === 0) {
                 counterItem = 0;
                 arrAtualLinha = [];
             }
 
             if (numero) {
-                if (counter !== 0) {
-                    arrAtualLinha.push(numero);
-                    counterItem += 1;
-
-
-                } else {
-                    arrAtualLinha.push(numero);
-                    counterItem += 1;
-                }
+                arrAtualLinha.push(numero);
+                counterItem += 1;
             }
             numerosBloco = [];
         }
@@ -144,7 +136,6 @@ export function generateByDifficult(difficultLevel: string) {
 
     if (rangeOf) {
         const numsToBeDeleted = sortearNumero(rangeOf);
-        console.log('numsToBeDeleted', numsToBeDeleted);
 
         if (numsToBeDeleted) {
             for (let i = 0; i < numsToBeDeleted; i++) {
@@ -164,8 +155,8 @@ export function generateByDifficult(difficultLevel: string) {
 
             }
         }
-        console.log(matriz)
         return matriz;
     };
 }
-generateByDifficult('Dificil');
+
+generateByDifficult('Facil');
