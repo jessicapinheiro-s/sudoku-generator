@@ -135,7 +135,7 @@ describe('generateRange', () => {
         const params = [20, 56];
         const result = generateRange(params);
 
-        if(result) {
+        if (result) {
             const resultAllNumber = result.map(item => typeof item === "number" ? true : false);
             expect(resultAllNumber).not.toContain(false);
         }
@@ -145,9 +145,39 @@ describe('generateRange', () => {
 describe('generateByDifficult', () => {
     test('Verificar se parametro recebido é o correto', () => {
         const param = 'Gato';
-
         const result = generateByDifficult(param);
-
-        expect(result).toBe([]);
+        expect(result).toEqual([]);
     });
+
+    test('Deve retornar o sudoku de acordo com a dificuldade selecionada', () => {
+        const rangeArr = {
+            'Facil': [8, 20],
+            'Médio': [25, 50],
+            'Dificil': [35, 60]
+        };
+        const param = 'Facil';
+        const result = generateByDifficult(param);
+        console.log('result', result)
+
+        let newArrRef: number[] = [];
+
+        result?.forEach(arr => {
+            newArrRef = [...newArrRef, ...arr];
+        });
+
+
+        const qtdVazio = newArrRef.filter(item => item === 0);
+
+
+        if (param === 'Facil') {
+            expect(qtdVazio.length).toBeGreaterThanOrEqual(8);
+            expect(qtdVazio.length).toBeLessThanOrEqual(20);
+        } else if (param === 'Médio') {
+            expect(qtdVazio.length).toBeGreaterThanOrEqual(25);
+            expect(qtdVazio.length).toBeLessThanOrEqual(50);
+        } else {
+            expect(qtdVazio.length).toBeGreaterThanOrEqual(35);
+            expect(qtdVazio.length).toBeLessThanOrEqual(60);
+        }
+    })
 });

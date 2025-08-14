@@ -4,7 +4,6 @@ export function sortearNumero(numerosDisponiveis: number[]) {
 }
 
 
-
 export function gerarNumeroSemDuplicata(
     arr: number[],
     numerosBlocoDisponiveisBloco: number[]
@@ -133,31 +132,35 @@ export function generateRange(arr: number[]) {
 }
 
 export function generateByDifficult(difficultLevel: string) {
+    if (difficultLevel !== 'Facil' && difficultLevel !== 'Médio' && difficultLevel !== 'Dificil') {
+        console.log('erro'); return [];
+    }
     //de acordo com o nivel de dificuldade selecionado, deve-se gerar um arr de numeros a ser sorteado para serem retirados do sudoku
     const rangeArr = difficultLevel === 'Facil' ? [8, 20] : difficultLevel === 'Médio' ? [25, 50] : [35, 60];
     const rangeOf = generateRange(rangeArr);
     const matriz = generateSudoku();
-    const numerosBase = [1, 2, 3, 4, 5, 6, 7, 8, 9,];
+    const numerosBase = [0, 1, 2, 3, 4, 5, 6, 7, 8];
 
-    if(difficultLevel !== 'Facil' && difficultLevel !== 'Médio' && difficultLevel !== 'Dificil') return [];
 
     if (rangeOf) {
         const numsToBeDeleted = sortearNumero(rangeOf);
+        console.log('numsToBeDeleted', numsToBeDeleted);
 
         if (numsToBeDeleted) {
             for (let i = 0; i < numsToBeDeleted; i++) {
-                matriz.map(arr => {
+                const linhaAserAlterada = sortearNumero(numerosBase);
+                if (linhaAserAlterada) {
+                    const line = matriz[linhaAserAlterada];
                     const sortearPositions = sortearNumero(numerosBase);
-                    if(sortearPositions){
-                        const newArr = arr.splice(sortearPositions, 1);
-                        arr = newArr;
-                    };
 
-                    return arr;
-                })
+                    if (sortearPositions && line) {
+                        line.splice(sortearPositions, 1, 0);
+                    };
+                }
             }
         }
+        console.log(matriz)
+        return matriz;
     };
 }
-
-generateSudoku();
+generateByDifficult('Dificil');
